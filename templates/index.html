@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ru" class="html-main">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Что в кино">
+    <meta name="author" content="">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <title>HTML DIFF</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='css/album.css') }}" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <header>
+      <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8 col-md-7 py-4">
+              <p class="text-muted">Это ТОП-12 фильмов, демонстрирующихся в настоящее время в кинотеатрах Санкт-Петербурга.  Фильмы отранжированы согласно рейтингу КиноПоиска. Сделано на Flask, сверстано на Bootstrap.</p>
+            </div>
+            <div class="col-sm-4 offset-md-1 py-4">
+              <h4 class="text-white">Источники</h4>
+              <ul class="list-unstyled">
+                <li><a href="https://www.afisha.ru/" class="text-white">Афиша</a></li>
+                <li><a href="https://www.kinopoisk.ru/" class="text-white">КиноПоиск</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="navbar navbar-dark bg-dark box-shadow">
+        <div class="container d-flex justify-content-between">
+          <a href="#" class="navbar-brand d-flex align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            <strong>HTML DIFF</strong>
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+
+        <div class="row">
+          <div class="col-md-12">
+            <form action="/" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file1"><br>
+            <input type="file" name="file2"><br>
+             <button type="submit" value="Upload">Download and Diff</button>
+           </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <h4>file1</h4>
+          {{ html1|safe }}<br><br>
+          <h4>file2</h4>
+          {{ html2|safe }}<br>
+          </div>
+        </div>
+        {% if err: %}
+          <strong style="color:red;">{{ err }}</strong>
+        {% else %}
+        <div class="row">
+        <div class="col-md-12"><hr>
+          <h2>DIFF</h2>
+          {{ html_diff|safe }}
+        </div>
+        </div>
+        {% endif %}
+
+
+      </div>
+    </main>
+    <footer class="text-muted">
+      <div class="container">
+        <p>2019</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='js/jquery-slim.min.js') }}"><\/script>')</script>
+    <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/holder.min.js') }}"></script>
+  </body>
+</html>
