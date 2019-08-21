@@ -2,6 +2,8 @@
 
 [TODO]
 
+# Example
+![born screenshot](screenshots/born.png)
 
 # Project Goals
 
