@@ -23,20 +23,11 @@ def fetch_file(file):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
-        with open(os.path.join(UPLOADS_FOLDER, 'txt1.html')) as f:
-            html1 = f.read()
-        with open(os.path.join(UPLOADS_FOLDER, 'txt2.html')) as f:
-            html2 = f.read()
-        html_diff = diff.textDiff(html1, html2)
-        return render_template('index.html', html1=html1, html2=html2, html_diff=html_diff)
-    file1 = request.files['file1']
-    file2 = request.files['file2']
-    if secure_filename(file1.filename) == '' or secure_filename(file2.filename) == '':
-        return render_template('index.html', err='Please choose two files for comparing')
-    html1 = fetch_file(file1)
-    html2 = fetch_file(file2)
-    html_diff = diff.textDiff(html1, html2)
-    return render_template('index.html', html1=html1, html2=html2, html_diff=html_diff)
+        return render_template('index.html')
+    data = request.form.to_dict()
+    html_diff = diff.textDiff(**data)
+    return render_template('index.html', html1=data['html1'], html2=data['html2'], html_diff=html_diff)
+
 
 if __name__ == '__main__':
     host = os.environ.get('HOST')

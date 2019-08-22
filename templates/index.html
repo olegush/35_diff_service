@@ -6,30 +6,23 @@
     <meta name="description" content="Что в кино">
     <meta name="author" content="">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
-
     <title>HTML DIFF</title>
-
-    <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
     <link href="{{ url_for('static', filename='css/album.css') }}" rel="stylesheet">
   </head>
 
   <body>
-
     <header>
       <div class="collapse bg-dark" id="navbarHeader">
         <div class="container">
           <div class="row">
             <div class="col-sm-8 col-md-7 py-4">
-              <p class="text-muted">Это ТОП-12 фильмов, демонстрирующихся в настоящее время в кинотеатрах Санкт-Петербурга.  Фильмы отранжированы согласно рейтингу КиноПоиска. Сделано на Flask, сверстано на Bootstrap.</p>
+              <p class="text-muted">Cервис, который делает диф для юридических документов, свёрстанных в html (не спрашивай, почему так сложилось). Пайчарме: красным подсвечено удалённое, зелёным – добавленное, жёлтым – то, что переместилось из одной части документа в другую без изменений.</p>
             </div>
             <div class="col-sm-4 offset-md-1 py-4">
-              <h4 class="text-white">Источники</h4>
+              <h4 class="text-white">Сделано на основе</h4>
               <ul class="list-unstyled">
-                <li><a href="https://www.afisha.ru/" class="text-white">Афиша</a></li>
-                <li><a href="https://www.kinopoisk.ru/" class="text-white">КиноПоиск</a></li>
+                <li><a href="https://github.com/aaronsw/htmldiff" class="text-white">htmldiff by aaronsw</a></li>
               </ul>
             </div>
           </div>
@@ -50,47 +43,121 @@
 
     <main>
       <div class="container">
-
-        <div class="row">
-          <div class="col-md-12">
-            <form action="/" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file1"><br>
-            <input type="file" name="file2"><br>
-             <button type="submit" value="Upload">Download and Diff</button>
-           </form>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
+      <form action="/" method="POST">
+        <div class="row text-center mt-3">
+          <div class="col-md-6 mb-5">
             <h4>file1</h4>
-          {{ html1|safe }}<br><br>
-          <h4>file2</h4>
-          {{ html2|safe }}<br>
+            <textarea class="form-control" id="html1" name="html1" placeholder="Required example textarea" required rows="5">{{ html1|safe}}</textarea>
+          </div>
+          <div class="col-md-6 mb-5">
+            <h4>file2</h4>
+            <textarea class="form-control" id="html2" name="html2" placeholder="Required example textarea" required rows="5">{{ html2|safe}}</textarea>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="add_class">Added class</label>
+              </div>
+              <select class="custom-select" id="added_class" name="added_class">
+                <option selected value="green">green</option>
+                <option value="lime">lime</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="add_element">Added element</label>
+              </div>
+              <select class="custom-select" id="added_element" name="added_element">
+                <option selected value="font">font</option>
+                <option value="span">span</option>
+              </select>
+            </div>
           </div>
         </div>
-        {% if err: %}
-          <strong style="color:red;">{{ err }}</strong>
-        {% else %}
-        <div class="row">
-        <div class="col-md-12"><hr>
-          <h2>DIFF</h2>
-          {{ html_diff|safe }}
+        <div class="row text-center mt-3">
+          <div class="col-md-6">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="remove_class">Removed class</label>
+              </div>
+              <select class="custom-select" id="removed_class" name="removed_class">
+                <option selected value="red">red</option>
+                <option value="crimson">crimson</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="remove_class">Removed element</label>
+              </div>
+              <select class="custom-select" id="removed_element" name="removed_element">
+                <option selected value="font">font</option>
+                <option value="span">span</option>
+              </select>
+            </div>
+          </div>
         </div>
+        <div class="row text-center mt-3">
+          <div class="col-md-6">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="moved_class">Moved class</label>
+              </div>
+              <select class="custom-select" id="moved_class" name="moved_class">
+                <option selected value="orange">orange</option>
+                <option value="yellow">yellow</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="add_class">Moved element</label>
+              </div>
+              <select class="custom-select" id="moved_element" name="moved_element">
+                <option selected value="font">font</option>
+                <option value="span">span</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row text-center mt-3">
+          <div class="col-md-12 ">
+            <button class="btn btn-outline-primary btn-lg mb-5" type="submit" value="Upload">Download and Diff</button>
+          </div>
+        </div>
+        </form>
+
+        {% if html1 and html2 %}
+
+        <div class="col-md-12 mr-3 text-center">
+          <h2>DIFF</h2>
+        </div>
+        <div class="d-flex justify-content-center">
+          <div class="p-2">{{ html_diff }}</div>
+        </div>
+        <div class="d-flex justify-content-center">
+          <div class="p-2">{{ html_diff|safe }}</div>
+        </div>
+        {% else %}
+        <div class="row ">
+          <div class="col-md-12 mr-3">
+            <h4 class="text-center">Please fill textarea field to diff</h4>
+          </div>
         </div>
         {% endif %}
 
-
       </div>
     </main>
-    <footer class="text-muted">
+    <footer class="text-muted text-center">
       <div class="container">
-        <p>2019</p>
+        <p>HTML DIFF, 2019</p>
       </div>
     </footer>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='js/jquery-slim.min.js') }}"><\/script>')</script>
     <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
